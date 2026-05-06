@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Школа Вайбкодеров — Стажировка</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0F17; --bg-2:#0F1624; --bg-3:#141E2E;
+  --text:#E8ECF4; --text-dim:#9BA3B5; --text-faded:#6B7280;
+  --violet:#7C3AED; --violet-bright:#A855F7;
+  --cyan:#06B6D4; --cyan-bright:#22D3EE;
+  --green:#10B981; --amber:#F59E0B; --red:#EF4444; --pink:#EC4899;
+  --border:rgba(124,58,237,.22); --border-bright:rgba(124,58,237,.45);
+  --glass:rgba(20,30,46,.55); --glass-strong:rgba(20,30,46,.85);
+  --r:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--bg);color:var(--text);
+  min-height:100vh;-webkit-font-smoothing:antialiased;
+  position:relative;overflow-x:hidden
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse at 15% 10%, rgba(124,58,237,.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 90%, rgba(6,182,212,.14) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 50%, rgba(168,85,247,.05) 0%, transparent 70%)
+}
+body > *{position:relative;z-index:1}
+
+/* === HEADER === */
+header{
+  background:rgba(11,15,23,.72);backdrop-filter:blur(18px) saturate(140%);
+  -webkit-backdrop-filter:blur(18px) saturate(140%);
+  border-bottom:1px solid var(--border);
+  padding:12px 28px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:200
+}
+.logo{
+  font-size:20px;font-weight:900;letter-spacing:-.5px;
+  background:linear-gradient(135deg,#fff 0%,#A855F7 60%,#22D3EE 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent
+}
+.header-right{display:flex;align-items:center;gap:10px}
+.user-badge{
+  display:none;align-items:center;gap:8px;
+  padding:6px 14px 6px 6px;
+  background:rgba(124,58,237,.14);border-radius:24px;
+  border:1px solid var(--border-bright)
+}
+.user-badge.show{display:flex}
+.user-avatar{
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,#7C3AED,#22D3EE);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:900;font-size:13px
+}
+.user-name{font-weight:800;font-size:13px;color:var(--text)}
+.user-tag{
+  font-size:10px;color:var(--cyan-bright);font-weight:700;
+  font-family:'JetBrains Mono',monospace;letter-spacing:.1em
+}
+.api-input{
+  padding:8px 13px;border:1px solid var(--border);border-radius:10px;
+  font-size:13px;width:200px;font-family:'JetBrains Mono',monospace;
+  background:rgba(20,30,46,.6);color:var(--text)
+}
+.api-input::placeholder{color:var(--text-faded)}
+.api-input:focus{outline:none;border-color:var(--violet-bright);background:rgba(20,30,46,.9)}
+.btn{
+  padding:8px 16px;border-radius:10px;border:1px solid transparent;cursor:pointer;
+  font-weight:600;font-size:13px;font-family:inherit;transition:all .15s
+}
+.btn-ghost{background:rgba(124,58,237,.14);color:var(--violet-bright);border-color:var(--border)}
+.btn-ghost:hover{background:rgba(124,58,237,.22);border-color:var(--border-bright)}
+.btn-primary{background:linear-gradient(135deg,var(--violet),var(--cyan));color:#fff;border:none}
+.btn-primary:hover{filter:brightness(1.15);box-shadow:0 0 0 2px rgba(124,58,237,.3)}
+.btn-demo{
+  background:rgba(245,158,11,.12);color:var(--amber);
+  border:1px solid rgba(245,158,11,.35);font-family:'JetBrains Mono',monospace;font-size:12px
+}
+.btn-demo:hover{background:rgba(245,158,11,.2)}
+.key-saved{color:var(--green);font-size:12px;font-weight:700;opacity:0;transition:opacity .3s}
+.key-saved.show{opacity:1}
+
+/* === SCREENS === */
+.screen{display:none;animation:fadeIn .35s ease}
+.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.wrap{max-width:960px;margin:0 auto;padding:40px 24px 80px}
+
+/* === ENTRY === */
+.entry-screen{
+  min-height:calc(100vh - 57px);display:flex;align-items:center;justify-content:center;padding:40px 20px
+}
+.entry-card{
+  background:var(--glass);backdrop-filter:blur(18px) saturate(140%);
+  -webkit-backdrop-filter:blur(18px) saturate(140%);
+  border:1px solid var(--border);border-radius:24px;
+  padding:44px 40px;max-width:540px;width:100%;
+  box-shadow:0 20px 60px rgba(0,0,0,.4);text-align:center
+}
+.entry-stamp{
+  display:inline-block;
+  background:rgba(124,58,237,.14);color:var(--violet-bright);
+  padding:6px 14px;border-radius:999px;font-size:11px;font-weight:600;
+  letter-spacing:.18em;margin-bottom:20px;text-transform:uppercase;
+  font-family:'JetBrains Mono',monospace;
+  border:1px solid var(--border-bright)
+}
+.entry-card h1{
+  font-size:36px;font-weight:900;line-height:1.05;margin-bottom:12px;letter-spacing:-.02em
+}
+.entry-card h1 span{
+  background:linear-gradient(135deg,#fff 0%,#E8ECF4 35%,#A855F7 70%,#22D3EE 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text
+}
+.entry-card .lead{font-size:15px;color:var(--text-dim);margin-bottom:28px;line-height:1.55}
+.entry-block{text-align:left;margin-bottom:20px}
+.entry-block label{
+  display:block;font-size:11px;font-weight:600;color:var(--cyan-bright);
+  letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;
+  font-family:'JetBrains Mono',monospace
+}
+.name-input{
+  width:100%;padding:14px 18px;
+  border:1.5px solid var(--border);border-radius:12px;
+  font-size:17px;font-family:inherit;font-weight:600;
+  background:rgba(20,30,46,.6);color:var(--text);
+  transition:all .15s
+}
+.name-input::placeholder{color:var(--text-faded)}
+.name-input:focus{outline:none;border-color:var(--violet-bright);background:rgba(20,30,46,.9)}
+.age-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.age-pill{
+  flex:1;min-width:60px;padding:16px 12px;
+  border:1.5px solid var(--border);border-radius:12px;
+  background:rgba(20,30,46,.55);cursor:pointer;font-family:inherit;
+  font-size:18px;font-weight:800;transition:all .15s;color:var(--text)
+}
+.age-pill:hover{border-color:var(--border-bright);color:var(--violet-bright);transform:translateY(-2px)}
+.age-pill.sel{
+  border-color:var(--violet-bright);
+  background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(6,182,212,.1));
+  color:#fff;box-shadow:0 0 0 3px rgba(124,58,237,.2),0 8px 24px rgba(124,58,237,.25)
+}
+.age-pill small{
+  display:block;font-size:10px;font-weight:600;color:var(--text-faded);margin-top:4px;
+  letter-spacing:.08em;font-family:'JetBrains Mono',monospace
+}
+.age-pill.sel small{color:var(--cyan-bright)}
+.entry-submit{
+  width:100%;padding:17px;margin-top:8px;
+  background:linear-gradient(135deg,var(--violet),var(--cyan));color:#fff;
+  border:none;border-radius:14px;cursor:pointer;font-weight:800;
+  font-size:16px;font-family:inherit;transition:all .2s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  letter-spacing:-.01em
+}
+.entry-submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 32px rgba(124,58,237,.4)}
+.entry-submit:disabled{opacity:.4;cursor:not-allowed}
+.entry-foot{
+  margin-top:16px;font-size:11px;color:var(--text-faded);
+  letter-spacing:.1em;font-family:'JetBrains Mono',monospace;text-transform:uppercase
+}
+
+/* === SCREEN HEADER === */
+.screen-header{text-align:center;margin-bottom:32px}
+.screen-header .eyebrow{
+  display:inline-block;font-family:'JetBrains Mono',monospace;
+  font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.18em;
+  color:var(--cyan-bright);margin-bottom:14px
+}
+.screen-header h2{
+  font-size:32px;font-weight:800;margin-bottom:10px;letter-spacing:-.02em;line-height:1.1
+}
+.screen-header p{color:var(--text-dim);font-size:15px}
+
+/* === PROJECT CARDS === */
+.projects-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-bottom:28px}
+.proj-card{
+  background:var(--glass);backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border:1px solid var(--border);border-radius:16px;
+  padding:24px;cursor:pointer;transition:all .2s;position:relative
+}
+.proj-card:hover{
+  border-color:var(--border-bright);transform:translateY(-3px);
+  box-shadow:0 12px 32px rgba(124,58,237,.2)
+}
+.proj-card.sel{
+  border-color:var(--violet-bright);
+  background:linear-gradient(135deg,rgba(124,58,237,.12),rgba(6,182,212,.06));
+  box-shadow:0 0 0 3px rgba(124,58,237,.2),0 10px 30px rgba(124,58,237,.25)
+}
+.proj-card .emo{font-size:40px;display:block;margin-bottom:12px;line-height:1}
+.proj-card h3{font-size:18px;font-weight:700;margin-bottom:8px;color:var(--text);letter-spacing:-.01em}
+.proj-card p{font-size:13.5px;color:var(--text-dim);line-height:1.55}
+.age-tag{
+  position:absolute;top:14px;right:14px;padding:3px 10px;border-radius:999px;
+  font-size:10px;font-weight:600;letter-spacing:.08em;
+  font-family:'JetBrains Mono',monospace;text-transform:uppercase
+}
+.tag-green{background:rgba(16,185,129,.14);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+.tag-yellow{background:rgba(245,158,11,.14);color:var(--amber);border:1px solid rgba(245,158,11,.3)}
+
+/* === CUSTOMIZE === */
+.customize-card{
+  background:var(--glass);backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border:1px solid var(--border);border-radius:18px;
+  padding:32px;margin-bottom:20px
+}
+.cust-q{margin-bottom:28px;padding-bottom:26px;border-bottom:1px dashed rgba(124,58,237,.15)}
+.cust-q:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.q-label{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:10px;color:var(--text)}
+.q-num{
+  width:26px;height:26px;
+  background:linear-gradient(135deg,var(--violet),var(--cyan));
+  color:#fff;border-radius:50%;font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-family:'JetBrains Mono',monospace;
+  box-shadow:0 0 12px rgba(124,58,237,.5)
+}
+.q-sub{font-size:12px;color:var(--text-dim);font-weight:400;margin-left:4px}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{
+  padding:9px 15px;border:1px solid var(--border);border-radius:999px;
+  background:rgba(20,30,46,.55);cursor:pointer;font-size:13px;font-family:inherit;
+  color:var(--text-dim);transition:all .15s;white-space:nowrap
+}
+.pill:hover{border-color:var(--border-bright);color:var(--text)}
+.pill.sel{
+  border-color:var(--cyan-bright);
+  background:rgba(6,182,212,.14);
+  color:var(--cyan-bright);font-weight:600;
+  box-shadow:0 0 0 2px rgba(6,182,212,.2)
+}
+
+/* === VOICE === */
+.voice-card{
+  background:var(--glass);backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border:1px solid var(--border);border-radius:18px;
+  padding:30px;margin-bottom:18px
+}
+.helpers-box{
+  background:linear-gradient(135deg,rgba(124,58,237,.1),rgba(6,182,212,.06));
+  border:1px solid var(--border-bright);border-radius:12px;
+  padding:18px 22px;margin-bottom:20px
+}
+.helpers-title{
+  font-size:11px;font-weight:600;color:var(--cyan-bright);margin-bottom:12px;
+  font-family:'JetBrains Mono',monospace;letter-spacing:.15em;text-transform:uppercase
+}
+.helpers-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.helpers-list li{font-size:14px;line-height:1.5;color:var(--text-dim);padding-left:20px;position:relative}
+.helpers-list li::before{
+  content:'→';position:absolute;left:0;top:0;
+  color:var(--violet-bright);font-weight:700
+}
+.voice-row{display:flex;gap:12px;align-items:flex-start}
+.voice-btn{
+  width:56px;height:56px;border-radius:50%;border:none;
+  background:linear-gradient(135deg,var(--violet),var(--cyan));
+  color:#fff;font-size:22px;cursor:pointer;flex-shrink:0;
+  transition:all .2s;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 20px rgba(124,58,237,.3)
+}
+.voice-btn:hover{transform:scale(1.06);box-shadow:0 8px 26px rgba(124,58,237,.5)}
+.voice-btn.rec{
+  background:linear-gradient(135deg,var(--red),var(--pink));
+  animation:pulse 1s infinite;box-shadow:0 6px 20px rgba(239,68,68,.4)
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.45)}50%{box-shadow:0 0 0 14px rgba(239,68,68,0)}}
+.textarea{
+  flex:1;padding:14px 16px;
+  border:1.5px solid var(--border);border-radius:12px;
+  font-size:14px;font-family:inherit;min-height:100px;resize:vertical;line-height:1.6;
+  background:rgba(10,14,22,.7);color:var(--text)
+}
+.textarea::placeholder{color:var(--text-faded)}
+.textarea:focus{outline:none;border-color:var(--violet-bright);background:rgba(10,14,22,.95)}
+.hint{
+  color:var(--text-faded);font-size:12px;margin-top:10px;
+  font-family:'JetBrains Mono',monospace;letter-spacing:.02em
+}
+
+/* === STATUS + GEN === */
+.status-bar{
+  padding:13px 18px;border-radius:12px;font-weight:500;font-size:14px;
+  margin-bottom:14px;display:none;align-items:center;gap:10px;
+  font-family:'JetBrains Mono',monospace
+}
+.status-bar.loading{
+  display:flex;
+  background:rgba(245,158,11,.1);color:var(--amber);
+  border:1px solid rgba(245,158,11,.3)
+}
+.status-bar.error{
+  display:block;
+  background:rgba(239,68,68,.1);color:var(--red);
+  border:1px solid rgba(239,68,68,.3)
+}
+.spin{
+  width:15px;height:15px;border:2px solid currentColor;border-top-color:transparent;
+  border-radius:50%;animation:sp .7s linear infinite;flex-shrink:0
+}
+@keyframes sp{to{transform:rotate(360deg)}}
+.gen-btn{
+  width:100%;padding:18px;font-size:16px;border-radius:14px;
+  background:linear-gradient(135deg,var(--violet),var(--cyan));
+  color:#fff;border:none;cursor:pointer;font-weight:800;font-family:inherit;
+  transition:all .2s;letter-spacing:-.01em;
+  box-shadow:0 8px 24px rgba(124,58,237,.3)
+}
+.gen-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 36px rgba(124,58,237,.5)}
+.gen-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* === STEPPER === */
+.stepper{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:40px}
+.step-item{display:flex;align-items:center}
+.step-dot{
+  width:32px;height:32px;border-radius:50%;
+  border:1.5px solid var(--border);
+  background:rgba(20,30,46,.6);
+  font-size:12px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text-faded);transition:all .25s;position:relative;z-index:1;
+  font-family:'JetBrains Mono',monospace
+}
+.step-dot.done{
+  background:linear-gradient(135deg,var(--violet),var(--cyan));
+  border-color:var(--violet-bright);color:#fff;
+  box-shadow:0 0 14px rgba(124,58,237,.5)
+}
+.step-dot.active{
+  background:rgba(20,30,46,.9);border-color:var(--cyan-bright);color:var(--cyan-bright);
+  box-shadow:0 0 0 4px rgba(6,182,212,.15)
+}
+.step-label{
+  font-size:10px;font-weight:500;color:var(--text-faded);position:absolute;top:38px;
+  white-space:nowrap;font-family:'JetBrains Mono',monospace;
+  letter-spacing:.08em;text-transform:uppercase
+}
+.step-wrap{position:relative;display:flex;flex-direction:column;align-items:center;padding-bottom:20px}
+.step-line{width:60px;height:1.5px;background:var(--border);transition:background .25s}
+.step-line.done{background:linear-gradient(90deg,var(--violet),var(--cyan))}
+
+/* === NAV === */
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:24px}
+.btn-back{
+  padding:10px 18px;border:1px solid var(--border);border-radius:10px;
+  background:rgba(20,30,46,.5);cursor:pointer;font-weight:500;font-size:13px;
+  font-family:inherit;color:var(--text-dim);transition:all .15s
+}
+.btn-back:hover{border-color:var(--border-bright);color:var(--text)}
+.btn-next{
+  padding:12px 28px;
+  background:linear-gradient(135deg,var(--violet),var(--cyan));
+  color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:700;
+  font-size:13px;font-family:inherit;transition:all .15s;letter-spacing:.02em;
+  box-shadow:0 4px 16px rgba(124,58,237,.3)
+}
+.btn-next:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(124,58,237,.5)}
+
+/* === RESULT === */
+.result-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:12px}
+.result-header h2{font-size:24px;font-weight:800;letter-spacing:-.01em}
+.result-actions{display:flex;gap:8px;flex-wrap:wrap}
+.preview-frame{
+  width:100%;height:560px;
+  border:1px solid var(--border);border-radius:16px;
+  background:#fff;
+  box-shadow:0 12px 40px rgba(0,0,0,.4)
+}
+.code-toggle-row{margin-top:14px}
+.code-toggle-btn{
+  background:rgba(124,58,237,.1);border:1px solid var(--border);border-radius:10px;
+  color:var(--violet-bright);font-weight:500;cursor:pointer;font-size:13px;
+  font-family:'JetBrains Mono',monospace;padding:8px 14px;transition:all .15s
+}
+.code-toggle-btn:hover{background:rgba(124,58,237,.2);border-color:var(--border-bright)}
+.code-pre{
+  background:rgba(10,14,22,.9);color:#E8ECF4;
+  border:1px solid var(--border);border-radius:12px;
+  padding:20px;font-family:'JetBrains Mono',monospace;font-size:12px;
+  overflow:auto;max-height:320px;margin-top:10px;display:none;line-height:1.7
+}
+
+/* === OFFER POPUP === */
+.popup-overlay{
+  position:fixed;inset:0;background:rgba(5,8,16,.85);
+  display:none;align-items:center;justify-content:center;z-index:1000;
+  backdrop-filter:blur(10px);padding:20px;overflow-y:auto
+}
+.popup-overlay.show{display:flex;animation:fadeIn .3s ease}
+.popup-card{
+  background:var(--bg-2);
+  border:1px solid var(--border-bright);
+  border-radius:24px;max-width:560px;width:100%;
+  position:relative;overflow:hidden;
+  box-shadow:0 24px 80px rgba(124,58,237,.35),0 0 0 1px rgba(6,182,212,.1);
+  max-height:calc(100vh - 40px);overflow-y:auto
+}
+.confetti-canvas{position:absolute;inset:0;pointer-events:none;z-index:0;width:100%;height:320px}
+.popup-close{
+  position:absolute;top:14px;right:14px;width:32px;height:32px;border:none;
+  background:rgba(255,255,255,.1);border-radius:50%;cursor:pointer;font-size:18px;
+  display:flex;align-items:center;justify-content:center;color:var(--text);z-index:10;
+  transition:all .15s
+}
+.popup-close:hover{background:rgba(255,255,255,.2)}
+
+.pop-top{
+  background:linear-gradient(135deg,rgba(124,58,237,.6) 0%,rgba(236,72,153,.4) 50%,rgba(6,182,212,.5) 100%);
+  padding:40px 30px 32px;text-align:center;color:#fff;position:relative;
+  border-bottom:1px solid var(--border-bright)
+}
+.pop-top::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(168,85,247,.4) 0%,transparent 60%);
+  pointer-events:none
+}
+.pop-top-content{position:relative;z-index:1}
+.medal-ring{
+  width:92px;height:92px;margin:0 auto 16px;border-radius:50%;
+  background:linear-gradient(135deg,var(--amber),var(--red));
+  display:flex;align-items:center;justify-content:center;
+  font-size:44px;box-shadow:0 10px 32px rgba(245,158,11,.45);
+  border:4px solid rgba(255,255,255,.2)
+}
+.pop-title{
+  font-size:30px;font-weight:900;line-height:1.05;margin-bottom:8px;letter-spacing:-.02em;
+  background:linear-gradient(135deg,#fff 0%,#22D3EE 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text
+}
+.pop-greeting{font-size:15px;opacity:.95;font-weight:600;color:#fff}
+.pop-sub{font-size:13px;opacity:.85;margin-top:8px;line-height:1.5;color:#fff}
+
+.stats-row{display:flex;gap:10px;justify-content:center;padding:24px 24px 8px;flex-wrap:wrap}
+.stat-pill{
+  background:rgba(20,30,46,.6);
+  border:1px solid var(--border);border-radius:12px;
+  padding:12px 18px;text-align:center;flex:1;min-width:86px;max-width:120px
+}
+.stat-num{
+  font-size:26px;font-weight:900;display:block;line-height:1;
+  background:linear-gradient(135deg,var(--violet-bright),var(--cyan-bright));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:-.02em
+}
+.stat-lbl{
+  font-size:10px;color:var(--text-faded);font-weight:500;margin-top:5px;display:block;
+  font-family:'JetBrains Mono',monospace;letter-spacing:.1em;text-transform:uppercase
+}
+
+.badges-row{display:flex;gap:8px;justify-content:center;padding:14px 24px 0;flex-wrap:wrap}
+.badge{
+  display:flex;align-items:center;gap:5px;padding:6px 11px;border-radius:999px;
+  font-size:11px;font-weight:600;font-family:'JetBrains Mono',monospace;
+  letter-spacing:.04em
+}
+.badge-purple{background:rgba(124,58,237,.14);color:var(--violet-bright);border:1px solid rgba(124,58,237,.3)}
+.badge-green{background:rgba(16,185,129,.14);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+.badge-yellow{background:rgba(245,158,11,.14);color:var(--amber);border:1px solid rgba(245,158,11,.3)}
+
+/* Offer card */
+.offer-card{
+  margin:22px;padding:26px 24px;
+  background:linear-gradient(135deg,rgba(245,158,11,.08) 0%,rgba(239,68,68,.05) 100%);
+  border:1px dashed rgba(245,158,11,.4);border-radius:18px;position:relative
+}
+.offer-stamp{
+  position:absolute;top:-12px;right:22px;
+  background:linear-gradient(135deg,var(--red),var(--amber));color:#fff;
+  padding:5px 14px;border-radius:999px;font-size:10px;font-weight:800;
+  letter-spacing:.18em;transform:rotate(3deg);font-family:'JetBrains Mono',monospace;
+  box-shadow:0 4px 14px rgba(239,68,68,.4)
+}
+.offer-header{
+  display:flex;align-items:center;gap:10px;margin-bottom:14px;
+  font-size:10px;font-weight:600;color:var(--amber);letter-spacing:.2em;text-transform:uppercase;
+  font-family:'JetBrains Mono',monospace
+}
+.offer-header::before,.offer-header::after{
+  content:'';flex:1;height:1px;background:rgba(245,158,11,.3)
+}
+.offer-title{
+  font-size:22px;font-weight:900;text-align:center;margin-bottom:8px;color:var(--text);line-height:1.2;
+  letter-spacing:-.01em
+}
+.offer-text{font-size:13px;text-align:center;color:var(--text-dim);line-height:1.6;margin-bottom:18px}
+.offer-benefits{list-style:none;padding:0;margin:0 0 18px;display:flex;flex-direction:column;gap:10px}
+.offer-benefits li{
+  display:flex;align-items:center;gap:12px;font-size:13.5px;font-weight:500;color:var(--text)
+}
+.offer-benefits li::before{
+  content:'✓';display:flex;align-items:center;justify-content:center;
+  width:22px;height:22px;
+  background:rgba(16,185,129,.14);color:var(--green);
+  border:1px solid rgba(16,185,129,.35);
+  border-radius:6px;font-size:13px;font-weight:700;flex-shrink:0
+}
+
+.popup-btns{padding:0 22px 26px;display:flex;gap:10px;flex-direction:column}
+.popup-btn-main{
+  padding:16px 24px;
+  background:linear-gradient(135deg,var(--red),var(--amber));
+  color:#fff;border:none;border-radius:12px;cursor:pointer;
+  font-weight:800;font-size:15px;font-family:inherit;transition:all .2s;letter-spacing:.01em;
+  box-shadow:0 8px 24px rgba(239,68,68,.3)
+}
+.popup-btn-main:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(239,68,68,.5)}
+.popup-btn-sec{
+  padding:13px 20px;background:rgba(20,30,46,.6);color:var(--text-dim);
+  border:1px solid var(--border);border-radius:12px;cursor:pointer;
+  font-weight:500;font-size:13px;font-family:inherit;transition:all .15s
+}
+.popup-btn-sec:hover{border-color:var(--border-bright);color:var(--text)}
+
+/* === LANDING MODAL === */
+.offer-land-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:1100;
+  display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(12px)
+}
+.offer-land-overlay.show{display:flex;animation:fadeIn .3s ease}
+.offer-land{
+  background:var(--bg-2);
+  border:1px solid var(--border-bright);
+  border-radius:24px;max-width:640px;width:100%;
+  padding:44px 40px;text-align:center;position:relative;
+  max-height:calc(100vh - 40px);overflow-y:auto;
+  box-shadow:0 24px 80px rgba(124,58,237,.4)
+}
+.offer-land h1{font-size:34px;font-weight:900;margin-bottom:12px;line-height:1.1;letter-spacing:-.02em}
+.offer-land h1 span{
+  background:linear-gradient(135deg,#fff 0%,#A855F7 60%,#22D3EE 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text
+}
+.offer-land .tagline{font-size:15px;color:var(--text-dim);margin-bottom:28px;line-height:1.55}
+.offer-land-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:28px;text-align:left}
+.offer-feat{
+  background:var(--glass);
+  border:1px solid var(--border);border-radius:14px;
+  padding:16px 18px;transition:all .2s
+}
+.offer-feat:hover{border-color:var(--border-bright);transform:translateY(-2px)}
+.offer-feat-emoji{font-size:24px;display:block;margin-bottom:8px}
+.offer-feat-title{font-weight:700;font-size:14px;margin-bottom:4px;color:var(--text)}
+.offer-feat-desc{font-size:12.5px;color:var(--text-dim);line-height:1.5}
+.offer-land-cta{
+  display:inline-block;padding:16px 40px;
+  background:linear-gradient(135deg,var(--violet),var(--cyan));color:#fff;
+  border:none;border-radius:14px;font-weight:800;font-size:16px;cursor:pointer;
+  font-family:inherit;transition:all .2s;letter-spacing:-.01em;
+  box-shadow:0 10px 30px rgba(124,58,237,.35)
+}
+.offer-land-cta:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(124,58,237,.55)}
+.offer-land-close{
+  position:absolute;top:14px;right:14px;width:34px;height:34px;border:none;
+  background:rgba(255,255,255,.08);border-radius:50%;cursor:pointer;font-size:18px;
+  color:var(--text-dim);transition:all .15s
+}
+.offer-land-close:hover{background:rgba(255,255,255,.16);color:var(--text)}
+
+.land-foot{
+  margin-top:18px;font-size:11px;color:var(--text-faded);
+  letter-spacing:.08em;font-family:'JetBrains Mono',monospace;text-transform:uppercase
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 720px){
+  header{padding:12px 18px;flex-wrap:wrap;gap:8px}
+  .api-input{width:140px}
+  .logo{font-size:17px}
+  .entry-card{padding:32px 24px}
+  .entry-card h1{font-size:28px}
+  .screen-header h2{font-size:24px}
+  .projects-grid{grid-template-columns:1fr}
+  .offer-land-grid{grid-template-columns:1fr}
+  .step-line{width:30px}
+  .step-label{font-size:9px}
+  .wrap{padding:28px 18px 60px}
+  .preview-frame{height:420px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">◆ Школа Вайбкодеров</div>
+  <div class="header-right">
+    <div class="user-badge" id="userBadge">
+      <div class="user-avatar" id="userAvatar">?</div>
+      <div style="display:flex;flex-direction:column;line-height:1.2">
+        <span class="user-name" id="userName">—</span>
+        <span class="user-tag">СТАЖЁР</span>
+      </div>
+    </div>
+    <button class="btn btn-demo" onclick="showDemo()">◇ демо</button>
+    <input type="password" class="api-input" id="apiKey" placeholder="API ключ Claude…">
+    <button class="btn btn-ghost" onclick="saveKey()">Сохранить</button>
+    <span class="key-saved" id="keySaved">✓</span>
+  </div>
+</header>
+
+<!-- ══════════ SCREEN: ENTRY ══════════ -->
+<div class="screen active" id="s-entry">
+  <div class="entry-screen">
+    <div class="entry-card">
+      <div class="entry-stamp">Step 1 · Подача заявки</div>
+      <h1>Добро пожаловать в<br><span>Школу Вайбкодеров</span></h1>
+      <p class="lead">Ты стажёр. Задача дня — собрать первый рабочий проект.<br>Готов? Заполни бейдж.</p>
+
+      <div class="entry-block">
+        <label>Как тебя зовут?</label>
+        <input type="text" class="name-input" id="entryName" placeholder="Например: Никита" maxlength="20" autocomplete="off">
+      </div>
+
+      <div class="entry-block">
+        <label>Сколько тебе лет?</label>
+        <div class="age-pills" id="agePills">
+          <button class="age-pill" onclick="pickAge(11,this)">11<small>лет</small></button>
+          <button class="age-pill" onclick="pickAge(12,this)">12<small>лет</small></button>
+          <button class="age-pill" onclick="pickAge(13,this)">13<small>лет</small></button>
+          <button class="age-pill" onclick="pickAge(14,this)">14<small>лет</small></button>
+          <button class="age-pill" onclick="pickAge(15,this)">15<small>лет</small></button>
+          <button class="age-pill" onclick="pickAge(16,this)">16+<small>лет</small></button>
+        </div>
+      </div>
+
+      <button class="entry-submit" id="entrySubmit" onclick="submitEntry()" disabled>
+        Начать стажировку →
+      </button>
+      <div class="entry-foot">↳ За прохождение — офер в Школу</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN: PROJECT ══════════ -->
+<div class="screen" id="s-project">
+  <div class="wrap">
+    <div class="stepper" id="stepper"></div>
+    <div class="screen-header">
+      <span class="eyebrow">шаг 1 · выбор проекта</span>
+      <h2 id="proj-title">Что будем создавать?</h2>
+      <p id="proj-sub"></p>
+    </div>
+    <div class="projects-grid" id="proj-grid"></div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goScreen('s-entry')">← Назад</button>
+      <button class="btn-next" onclick="goToCustomize()">Дальше →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN: CUSTOMIZE ══════════ -->
+<div class="screen" id="s-customize">
+  <div class="wrap">
+    <div class="stepper" id="stepper2"></div>
+    <div class="screen-header">
+      <span class="eyebrow">шаг 2 · настройка</span>
+      <h2>Настрой свой проект</h2>
+      <p>Выбери варианты — ИИ учтёт всё это</p>
+    </div>
+    <div class="customize-card" id="cust-questions"></div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goScreen('s-project')">← Назад</button>
+      <button class="btn-next" id="custNext">Дальше →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN: VOICE ══════════ -->
+<div class="screen" id="s-voice">
+  <div class="wrap">
+    <div class="stepper" id="stepper3"></div>
+    <div class="screen-header">
+      <span class="eyebrow">шаг 3 · идея</span>
+      <h2>Расскажи о своей идее</h2>
+      <p>Нажми 🎤 и отвечай голосом — или напиши текстом</p>
+    </div>
+    <div class="voice-card">
+      <div class="helpers-box">
+        <div class="helpers-title">→ Ответь на эти вопросы</div>
+        <ul class="helpers-list" id="helpers"></ul>
+      </div>
+      <div class="voice-row">
+        <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()">🎤</button>
+        <textarea class="textarea" id="userPrompt" placeholder="Говори или пиши здесь…"></textarea>
+      </div>
+      <div class="hint">// чем больше деталей — тем круче получится</div>
+    </div>
+    <div class="status-bar" id="statusBar"></div>
+    <button class="gen-btn" id="genBtn" onclick="generate()">✨ Создать проект</button>
+    <div class="nav-row" style="margin-top:14px">
+      <button class="btn-back" onclick="goScreen('s-customize')">← Назад</button>
+      <span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN: RESULT ══════════ -->
+<div class="screen" id="s-result">
+  <div class="wrap">
+    <div class="result-header">
+      <h2>◆ Твоё приложение готово</h2>
+      <div class="result-actions">
+        <button class="btn btn-ghost" onclick="downloadHTML()">↓ Скачать</button>
+        <button class="btn btn-primary" onclick="openFull()">⛶ На весь экран</button>
+        <button class="btn btn-ghost" onclick="goScreen('s-voice')">↻ Пересобрать</button>
+        <button class="btn btn-demo" onclick="showCelebration()">◇ Офер</button>
+      </div>
+    </div>
+    <iframe class="preview-frame" id="previewFrame" sandbox="allow-scripts allow-forms allow-modals"></iframe>
+    <div class="code-toggle-row">
+      <button class="code-toggle-btn" onclick="toggleCode()">&lt;/&gt; Посмотреть код ↓</button>
+      <pre class="code-pre" id="codePre"></pre>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ POPUP: ОФЕР ══════════ -->
+<div class="popup-overlay" id="popup">
+  <div class="popup-card">
+    <canvas class="confetti-canvas" id="confettiCanvas"></canvas>
+    <button class="popup-close" onclick="closePopup()">×</button>
+
+    <div class="pop-top">
+      <div class="pop-top-content">
+        <div class="medal-ring" id="popMedal">🏆</div>
+        <div class="pop-title" id="popTitle">ОФЕР ПРИНЯТ!</div>
+        <div class="pop-greeting" id="popGreeting">Поздравляем, стажёр!</div>
+        <div class="pop-sub" id="popSub">Первый проект собран. Это только начало</div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-pill">
+        <span class="stat-num" id="statLines">0</span>
+        <span class="stat-lbl">строк кода</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-num" id="statSec">0</span>
+        <span class="stat-lbl">секунд</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-num" id="statKb">0</span>
+        <span class="stat-lbl">КБ</span>
+      </div>
+    </div>
+
+    <div class="badges-row">
+      <div class="badge badge-purple">◆ первый код</div>
+      <div class="badge badge-green">⚡ вайбкодер</div>
+      <div class="badge badge-yellow" id="popBadge3">🎮 геймдев</div>
+    </div>
+
+    <div class="offer-card">
+      <div class="offer-stamp">OFFER</div>
+      <div class="offer-header">Школа Вайбкодеров</div>
+      <div class="offer-title" id="offerTitle">Приглашаем на полный курс!</div>
+      <div class="offer-text">Ты прошёл стажировку. Теперь — твой шанс забрать оффер на обучение.</div>
+      <ul class="offer-benefits">
+        <li>8 крутых проектов за 4 недели</li>
+        <li>Личный ментор и чат поддержки</li>
+        <li>Сертификат и портфолио в конце</li>
+        <li>Скидка 30% если принять сегодня</li>
+      </ul>
+    </div>
+
+    <div class="popup-btns">
+      <button class="popup-btn-main" onclick="acceptOffer()">◆ Принять оффер — пойти учиться</button>
+      <button class="popup-btn-sec" onclick="closePopup()">Посмотреть мой проект</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ LANDING MODAL ══════════ -->
+<div class="offer-land-overlay" id="landModal">
+  <div class="offer-land">
+    <button class="offer-land-close" onclick="closeLand()">×</button>
+    <h1 id="landGreeting">🎉 <span>Добро пожаловать,<br>будущий разработчик!</span></h1>
+    <p class="tagline">Ты только что собрал рабочее приложение. Представь — что будет за 4 недели.</p>
+    <div class="offer-land-grid">
+      <div class="offer-feat"><span class="offer-feat-emoji">🎮</span><div class="offer-feat-title">8 проектов</div><div class="offer-feat-desc">Игры, сайты, мини-приложения</div></div>
+      <div class="offer-feat"><span class="offer-feat-emoji">🧑‍🏫</span><div class="offer-feat-title">Живой ментор</div><div class="offer-feat-desc">Поможет когда застрял</div></div>
+      <div class="offer-feat"><span class="offer-feat-emoji">🎓</span><div class="offer-feat-title">Сертификат</div><div class="offer-feat-desc">И готовое портфолио</div></div>
+      <div class="offer-feat"><span class="offer-feat-emoji">👥</span><div class="offer-feat-title">Команда</div><div class="offer-feat-desc">Сверстники, общий чат</div></div>
+    </div>
+    <button class="offer-land-cta" onclick="closeLand()">Хочу на курс →</button>
+    <div class="land-foot">↳ это демо офера · финальная интеграция в лендинге</div>
+  </div>
+</div>
+
+<script>
+// ═════════════════════════════════
+// STATE
+// ═════════════════════════════════
+const S = {
+  name: '', age: 0, level: 1,
+  project: null, answers: {}, prompt: '',
+  html: '', genSec: 0, genStart: 0
+}
+
+// ═════════════════════════════════
+// CONFIGS
+// ═════════════════════════════════
+const LEVELS = {
+  1: { title: 'Два проекта для первого раза', sub: 'Простое, но рабочее 🌱', projects: ['catch-game','my-page'] },
+  2: { title: 'Серьёзные проекты', sub: 'Настоящий код и механики 🔥', projects: ['platformer','cool-site'] }
+}
+
+const PROJECTS = {
+  'catch-game': {
+    emoji:'🎮', label:'Простая игра', ageTag:'11–12', tagClass:'tag-green',
+    desc:'Персонаж двигается мышью, собирает хорошее и уклоняется от плохого. Очки, жизни, нарастающая сложность.',
+    questions:[
+      {q:'Кто главный герой?',sub:'Кем управляешь мышью',k:'hero',
+        opts:['🚀 Ракета','🐱 Котик','🧙 Волшебник','🦊 Лиса','👾 Пришелец','🤖 Робот','🦸 Супергерой','🐉 Дракон']},
+      {q:'Что он собирает?',sub:'За это дают очки',k:'collect',
+        opts:['⭐ Звёзды','💎 Кристаллы','🍕 Пиццу','🪙 Монеты','🎁 Подарки','🍎 Яблоки','⚡ Энергию','🌸 Цветы']},
+      {q:'Чего избегает?',sub:'Касание = -1 жизнь',k:'avoid',
+        opts:['☄️ Астероиды','💣 Бомбы','🔥 Огонь','⚡ Молнии','👻 Призраки','🌊 Волны','🪨 Камни','🦠 Вирусы']},
+      {q:'Где происходит действие?',sub:'Атмосфера и фон',k:'world',
+        opts:['🌌 Космос','🌊 Океан','🌲 Лес','🏙️ Мегаполис','🍄 Грибной мир','❄️ Арктика','🌋 Вулкан','🏜️ Пустыня']}
+    ],
+    helpers:[
+      'Придумай имя своему герою',
+      'Какая у него суперспособность или особенность?',
+      'Есть ли история — почему он собирает именно это?',
+      'Хочешь добавить что-то особенное — бонус, взрыв, секрет?'
+    ],
+    trophy:'🎮', badge3:'🎮 геймдев',
+    popTitle:()=>'ИГРА СОБРАНА!',
+    popSub:(s)=>`Герой «${s.hero||'?'}» в мире «${s.world||'?'}» — твоя игра готова!`,
+    offerTitle:(n)=>`${n}, ты геймдев!`,
+    system:(s)=>`Ты опытный разработчик HTML5-игр. Создай простую аркадную игру на Canvas.
+
+ПАРАМЕТРЫ ОТ ИГРОКА:
+- Герой: ${s.hero||'персонаж'}
+- Собирает: ${s.collect||'предметы'} (+10 очков)
+- Избегает: ${s.avoid||'препятствия'} (-1 жизнь)
+- Мир/фон: ${s.world||'фантастический'}
+
+ОБЯЗАТЕЛЬНЫЕ ТРЕБОВАНИЯ:
+- Один HTML файл, весь CSS/JS внутри
+- Canvas 600×450. Персонаж управляется МЫШЬЮ (mousemove)
+- Два типа объектов с разной скоростью падают сверху случайно
+- HUD: счёт и жизни (❤️❤️❤️) в верхнем углу
+- Скорость постепенно растёт каждые 10 секунд
+- Красивый экран Game Over: счёт + кнопка перезапуска
+- Фон: анимированный градиент/звёзды соответствующий теме
+- requestAnimationFrame игровой цикл
+- Персонаж и объекты: emoji через ctx.fillText
+
+Пиши ТОЛЬКО чистый HTML без markdown, начиная с <!DOCTYPE html>`
+  },
+  'my-page': {
+    emoji:'🌐', label:'Моя страница', ageTag:'11–12', tagClass:'tag-green',
+    desc:'Личный мини-сайт: кто ты, чем увлекаешься. Красивые карточки и анимации!',
+    questions:[
+      {q:'Твоё главное увлечение?',sub:'Основная тема',k:'hobby',opts:['🎮 Игры','🎨 Рисование','⚽ Спорт','🎵 Музыка','📚 Книги','🔬 Наука','🎬 Кино','✈️ Путешествия']},
+      {q:'Стиль страницы?',sub:'Как должна выглядеть',k:'style',opts:['🌙 Тёмный крутой','☀️ Светлый яркий','🌸 Нежный розовый','🔥 Огненный','🌊 Морской','🌿 Природный','💎 Премиальный','🌈 Радужный']},
+      {q:'Главный цвет акцента?',sub:'Кнопки и детали',k:'color',opts:['💜 Фиолетовый','💙 Синий','💚 Зелёный','🧡 Оранжевый','💗 Розовый','⚫ Чёрный','🔴 Красный','💛 Жёлтый']},
+      {q:'Самое важное на странице?',sub:'Что выделить',k:'focus',opts:['🏆 Достижения','🎮 Любимые игры','🎬 Топ фильмов','💭 Мечты','🎯 Проекты','🎵 Плейлист','📸 Галерея','✍️ Мои мысли']}
+    ],
+    helpers:[
+      'Как тебя зовут или какой никнейм?',
+      'Что ты любишь делать больше всего?',
+      'Какая у тебя самая большая мечта?',
+      'Есть ли что-то необычное, что ты умеешь?'
+    ],
+    trophy:'🌐', badge3:'🌐 веб-дизайн',
+    popTitle:()=>'САЙТ ГОТОВ!',
+    popSub:(s)=>`Страница в стиле «${s.style||'?'}» с акцентом на «${s.focus||'?'}» — это твоё!`,
+    offerTitle:(n)=>`${n}, ты веб-дизайнер!`,
+    system:(s)=>`Ты UI-дизайнер. Создай красивую личную страницу.
+
+ПАРАМЕТРЫ:
+- Увлечение: ${s.hobby||'разное'}
+- Стиль: ${s.style||'современный'}
+- Цвет акцента: ${s.color||'фиолетовый'}
+- Главный блок: ${s.focus||'обо мне'}
+
+ТРЕБОВАНИЯ:
+- Один HTML файл, CSS/JS внутри
+- Hero с именем/никнеймом и слоганом
+- 4 карточки увлечений (emoji + описание)
+- hover: scale(1.04) + тень
+- Секция «${s.focus||'достижения'}» — минимум 3 элемента
+- Fade-in анимация при загрузке
+- Строго цвет «${s.color||'?'}» + стиль «${s.style||'?'}»
+- Google Fonts; футер с цитатой
+
+Пиши ТОЛЬКО чистый HTML без markdown, начиная с <!DOCTYPE html>`
+  },
+  'platformer': {
+    emoji:'🕹️', label:'Платформер', ageTag:'13–15', tagClass:'tag-yellow',
+    desc:'Герой прыгает по платформам, собирает монеты, уничтожает врагов. Физика, двойной прыжок.',
+    questions:[
+      {q:'Жанр и атмосфера?',sub:'Задаёт всё остальное',k:'genre',opts:['🧙 Тёмное фэнтези','🤖 Киберпанк','🌿 Приключение','🌌 Sci-Fi','☠️ Хоррор','🌈 Аркадный яркий','🏔️ Дикая природа','🌊 Подводный мир']},
+      {q:'Главный герой?',sub:'Персонаж игрока',k:'char',opts:['🦊 Ловкий зверёк','⚔️ Рыцарь','🧙 Маг','🤖 Боевой робот','👽 Пришелец','🧑‍💻 Хакер','🦸 Супергерой','🐉 Маленький дракон']},
+      {q:'Особая механика?',sub:'Уникальная способность',k:'mechanic',opts:['💨 Рывок (dash)','🔮 Стрельба снарядами','🛡️ Отражение атак','🌀 Телепортация','⏰ Замедление времени','🔥 Огненный след','❄️ Заморозка','⚡ Молниевый удар']},
+      {q:'Цель уровня?',sub:'Как побеждаешь',k:'goal',opts:['🚪 Добраться до выхода','👑 Победить босса','💎 Собрать все кристаллы','🔑 Найти ключ','🌟 Зажечь 3 маяка','🏁 Финишная черта','💀 Уничтожить всех','🗝️ Открыть тайник']}
+    ],
+    helpers:[
+      'Придумай название игры',
+      'Опиши мир: опасный или весёлый, тёмный или яркий?',
+      'Есть ли у героя предыстория — что он ищет?',
+      'Опиши финального врага или препятствие'
+    ],
+    trophy:'🕹️', badge3:'🕹️ геймдизайн',
+    popTitle:()=>'ПЛАТФОРМЕР СОЗДАН!',
+    popSub:(s)=>`${s.char||'Герой'} в мире «${s.genre||'?'}» — это твоя игра!`,
+    offerTitle:(n)=>`${n}, ты геймдизайнер!`,
+    system:(s)=>`Ты разработчик игр. Создай платформер на HTML5 Canvas.
+
+ПАРАМЕТРЫ:
+- Жанр: ${s.genre||'приключение'}
+- Герой: ${s.char||'персонаж'}
+- Механика: ${s.mechanic||'прыжок'}
+- Цель: ${s.goal||'добраться до выхода'}
+
+ТРЕБОВАНИЯ:
+- Canvas 720×420. A/D + W или стрелки; пробел = прыжок
+- Гравитация 0.5, ускорение, трение; двойной прыжок
+- 6+ платформ, 2 движущихся
+- 8 монет (+10 очков)
+- 2 врага патрулируют (касание = -1 жизнь)
+- 3 жизни; экраны Start/Win/GameOver
+- Параллакс фон 2 слоя (стиль «${s.genre||'?'}»)
+- Механика «${s.mechanic||'?'}» — реализовать!
+- Звуки Web Audio: прыжок, монета, смерть
+- Всё через Canvas API
+
+Пиши ТОЛЬКО чистый HTML без markdown, начиная с <!DOCTYPE html>`
+  },
+  'cool-site': {
+    emoji:'💜', label:'Крутой лендинг', ageTag:'13–15', tagClass:'tag-yellow',
+    desc:'Портфолио, стартап или проект: анимации при скролле, современный дизайн, мобильная версия.',
+    questions:[
+      {q:'Тип проекта?',sub:'О чём лендинг',k:'type',opts:['🎮 Игра','🎨 Портфолио','🚀 Стартап','🎵 Музпроект','🌍 Соц. идея','🤖 AI-проект','🐾 Помощь животным','🍕 Кафе']},
+      {q:'Аудитория?',sub:'Для кого',k:'audience',opts:['👦 Ровесники','🎮 Геймеры','🎨 Творческие','💼 Взрослые','🌍 Все','👨‍👩‍👧 Семьи','🧑‍💻 Разработчики','📱 Соцсети']},
+      {q:'Стиль?',sub:'Визуальный характер',k:'style',opts:['⚫ Тёмный минимализм','🌈 Яркий дерзкий','🌸 Мягкий нежный','💎 Премиальный','🌿 Экологичный','🔥 Агрессивный','☁️ Воздушный','🎨 Художественный']},
+      {q:'Главная фишка?',sub:'Что запомнится',k:'feature',opts:['✨ Анимации','📊 Цифры','🖼️ Галерея','💬 Отзывы','🎬 Видео-фон','⚡ Интерактив','🎁 Бесплатный доступ','📱 Mobile-first']}
+    ],
+    helpers:[
+      'Как называется твой проект?',
+      'Главная идея одним предложением — зачем это людям?',
+      'Назови 3 главных преимущества',
+      'Чем он отличается от других?'
+    ],
+    trophy:'💜', badge3:'💜 фронтенд',
+    popTitle:()=>'ЛЕНДИНГ СОБРАН!',
+    popSub:(s)=>`Сайт о «${s.type||'?'}» в стиле «${s.style||'?'}» — готов!`,
+    offerTitle:(n)=>`${n}, ты фронтенд-разработчик!`,
+    system:(s)=>`Ты UI/UX дизайнер. Создай современный лендинг.
+
+ПАРАМЕТРЫ:
+- Тип: ${s.type||'стартап'}
+- Аудитория: ${s.audience||'все'}
+- Стиль: ${s.style||'современный'}
+- Фишка: ${s.feature||'анимации'}
+
+ТРЕБОВАНИЯ:
+- Один HTML, CSS/JS внутри
+- Навбар + бургер-меню через JS
+- Hero: заголовок, подзаголовок, 2 CTA кнопки
+- 3 карточки «Особенности» с hover-эффектом
+- Секция «${s.feature||'?'}» как главная
+- 3 отзыва
+- Форма контактов (имя/email/сообщение)
+- Fade-in при скролле: IntersectionObserver
+- Стиль строго «${s.style||'?'}»; Google Fonts
+- Плавный scroll-behavior
+
+Пиши ТОЛЬКО чистый HTML без markdown, начиная с <!DOCTYPE html>`
+  }
+}
+
+// ═════════════════════════════════
+// ENTRY SCREEN
+// ═════════════════════════════════
+document.getElementById('entryName').addEventListener('input', validateEntry)
+document.getElementById('apiKey').addEventListener('input', validateEntry)
+
+function pickAge(age, btn) {
+  S.age = age
+  document.querySelectorAll('.age-pill').forEach(p => p.classList.remove('sel'))
+  btn.classList.add('sel')
+  validateEntry()
+}
+
+function hasValidKey(k) {
+  return k && k.trim().startsWith('sk-ant-') && k.trim().length > 20
+}
+
+function validateEntry() {
+  const name = document.getElementById('entryName').value.trim()
+  const key  = document.getElementById('apiKey').value.trim()
+  const ok = name.length >= 2 && S.age > 0 && hasValidKey(key)
+  document.getElementById('entrySubmit').disabled = !ok
+}
+
+function submitEntry() {
+  const name = document.getElementById('entryName').value.trim()
+  if (name.length < 2 || !S.age) return
+  S.name = name
+  S.level = S.age <= 12 ? 1 : 2
+
+  // show user badge
+  document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase()
+  document.getElementById('userName').textContent = name
+  document.getElementById('userBadge').classList.add('show')
+
+  // load projects for level
+  const cfg = LEVELS[S.level]
+  document.getElementById('proj-title').textContent = cfg.title
+  document.getElementById('proj-sub').textContent = cfg.sub
+  const grid = document.getElementById('proj-grid')
+  grid.innerHTML = cfg.projects.map(id => {
+    const p = PROJECTS[id]
+    return `<div class="proj-card" id="pc-${id}" onclick="selectProject('${id}')">
+      <span class="age-tag ${p.tagClass}">${p.ageTag}</span>
+      <span class="emo">${p.emoji}</span>
+      <h3>${p.label}</h3>
+      <p>${p.desc}</p>
+    </div>`
+  }).join('')
+
+  renderStepper('stepper', 1)
+  goScreen('s-project')
+}
+
+// ═════════════════════════════════
+// NAVIGATION
+// ═════════════════════════════════
+function goScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'))
+  document.getElementById(id).classList.add('active')
+  window.scrollTo(0, 0)
+}
+
+function renderStepper(containerId, step) {
+  const steps = ['Проект','Настройка','Идея','Готово']
+  const el = document.getElementById(containerId)
+  if (!el) return
+  el.innerHTML = steps.map((lbl, i) => {
+    const n = i + 1
+    const cls = n < step ? 'done' : n === step ? 'active' : ''
+    const line = i < steps.length - 1 ? `<div class="step-line${n < step ? ' done' : ''}"></div>` : ''
+    return `<div class="step-item"><div class="step-wrap"><div class="step-dot ${cls}">${n < step ? '✓' : n}</div><span class="step-label">${lbl}</span></div>${line}</div>`
+  }).join('')
+}
+
+function selectProject(id) {
+  S.project = id
+  S.answers = {}
+  document.querySelectorAll('.proj-card').forEach(c => c.classList.remove('sel'))
+  document.getElementById('pc-' + id)?.classList.add('sel')
+}
+
+function goToCustomize() {
+  if (!S.project) { alert('Выбери тип проекта!'); return }
+  renderStepper('stepper2', 2)
+  renderQuestions()
+  goScreen('s-customize')
+}
+
+// ═════════════════════════════════
+// CUSTOMIZE
+// ═════════════════════════════════
+function renderQuestions() {
+  const proj = PROJECTS[S.project]
+  const container = document.getElementById('cust-questions')
+  container.innerHTML = proj.questions.map((q, qi) => `
+    <div class="cust-q">
+      <div class="q-label">
+        <span class="q-num">${qi + 1}</span>
+        ${q.q} <span class="q-sub">— ${q.sub}</span>
+      </div>
+      <div class="pills" id="pills-${qi}">
+        ${q.opts.map(opt => `<button class="pill" onclick="pickAnswer(${qi},'${opt.replace(/'/g,"\\'")}',this)">${opt}</button>`).join('')}
+      </div>
+    </div>
+  `).join('')
+}
+
+function pickAnswer(qi, val, btn) {
+  const proj = PROJECTS[S.project]
+  const key = proj.questions[qi].k
+  S.answers[key] = val
+  document.querySelectorAll(`#pills-${qi} .pill`).forEach(b => b.classList.remove('sel'))
+  btn.classList.add('sel')
+}
+
+document.getElementById('custNext').onclick = () => {
+  const proj = PROJECTS[S.project]
+  const missing = proj.questions.filter(q => !S.answers[q.k])
+  if (missing.length > 0) {
+    alert(`Ответь на все вопросы! Осталось: ${missing.map(q => q.q).join(', ')}`)
+    return
+  }
+  goToVoice()
+}
+
+function goToVoice() {
+  renderStepper('stepper3', 3)
+  const proj = PROJECTS[S.project]
+  const ul = document.getElementById('helpers')
+  ul.innerHTML = proj.helpers.map(h => `<li>${h}</li>`).join('')
+  goScreen('s-voice')
+}
+
+// ═════════════════════════════════
+// VOICE
+// ═════════════════════════════════
+let recognition = null, isRec = false
+function toggleVoice() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition
+  if (!SR) { alert('Голосовой ввод работает в Chrome!'); return }
+  if (isRec) { recognition.stop(); return }
+
+  recognition = new SR()
+  recognition.lang = 'ru-RU'
+  recognition.continuous = false
+  recognition.interimResults = true
+
+  const btn = document.getElementById('voiceBtn')
+  const ta  = document.getElementById('userPrompt')
+  const base = ta.value
+
+  recognition.onstart = () => { isRec = true; btn.classList.add('rec'); btn.textContent = '⏹' }
+  recognition.onresult = e => {
+    const t = Array.from(e.results).map(r => r[0].transcript).join('')
+    ta.value = base + (base ? ' ' : '') + t
+  }
+  recognition.onend = () => { isRec = false; btn.classList.remove('rec'); btn.textContent = '🎤' }
+  recognition.start()
+}
+
+// ═════════════════════════════════
+// API KEY
+// ═════════════════════════════════
+window.addEventListener('load', () => {
+  const k = sessionStorage.getItem('ck')
+  if (k) document.getElementById('apiKey').value = k
+})
+function saveKey() {
+  const k = document.getElementById('apiKey').value.trim()
+  if (!k) return
+  sessionStorage.setItem('ck', k)
+  const el = document.getElementById('keySaved')
+  el.classList.add('show')
+  setTimeout(() => el.classList.remove('show'), 2000)
+}
+
+// ═════════════════════════════════
+// GENERATE
+// ═════════════════════════════════
+async function generate() {
+  const key = sessionStorage.getItem('ck') || document.getElementById('apiKey').value.trim()
+  if (!key) { setStatus('error', '🔑 Введи API ключ в шапке!'); return }
+
+  const proj = PROJECTS[S.project]
+  const userTxt = document.getElementById('userPrompt').value.trim()
+  const msg = [
+    `Автор проекта: ${S.name} (${S.age} лет)`,
+    Object.entries(S.answers).map(([k,v]) => `${k}: ${v}`).join(', '),
+    userTxt ? `Описание: ${userTxt}` : 'Сделай что-то крутое по своему усмотрению!'
+  ].filter(Boolean).join('\n')
+
+  setStatus('loading', 'Генерирую код… 15–25 секунд')
+  document.getElementById('genBtn').disabled = true
+  S.genStart = Date.now()
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5',
+        max_tokens: 8000,
+        stream: true,
+        system: proj.system(S.answers) + `\n\n<frontend_aesthetics>\nИзбегай шаблонных AI-паттернов: банальные шрифты (Inter, Roboto, Arial), клише цветовые схемы (особенно фиолетовые градиенты на белом), предсказуемые layout-паттерны. Используй уникальные шрифты из Google Fonts, цельную цветовую тему, анимации и микро-интеракции. Сделай дизайн неожиданным и запоминающимся — специфичным под тему проекта.\n</frontend_aesthetics>`,
+        messages: [{ role: 'user', content: msg }]
+      })
+    })
+
+    if (!res.ok) {
+      const txt = await res.text()
+      console.error('[Claude API error]', res.status, txt)
+      let errMsg = `HTTP ${res.status}`
+      try {
+        const parsed = JSON.parse(txt)
+        if (res.status === 401) errMsg = '🔑 Неверный API ключ — проверь sk-ant-...'
+        else if (res.status === 429) errMsg = '⏳ Слишком много запросов — подожди немного'
+        else errMsg = parsed.error?.message || errMsg
+      } catch {}
+      throw new Error(errMsg)
+    }
+
+    let code = ''
+    const reader = res.body.getReader()
+    const decoder = new TextDecoder()
+    let buf = ''
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+      buf += decoder.decode(value, { stream: true })
+      const lines = buf.split('\n')
+      buf = lines.pop() || ''
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue
+        const payload = line.slice(6).trim()
+        if (!payload || payload === '[DONE]') continue
+        try {
+          const evt = JSON.parse(payload)
+          if (evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta') {
+            code += evt.delta.text
+          } else if (evt.type === 'error') {
+            throw new Error(evt.error?.message || 'stream error')
+          }
+        } catch (e) { if (e.message) throw e }
+      }
+    }
+    const m = code.match(/```(?:html)?\n?([\s\S]*?)```/i)
+    if (m) code = m[1].trim()
+
+    S.html = code
+    S.genSec = Math.round((Date.now() - S.genStart) / 1000)
+    setStatus('', '')
+
+    document.getElementById('previewFrame').srcdoc = code
+    document.getElementById('codePre').textContent = code
+    renderStepper('stepper3', 4)
+    goScreen('s-result')
+    showCelebration()
+
+  } catch (e) {
+    console.error('[generate]', e)
+    setStatus('error', `❌ ${e.message || e.name || 'network error'}`)
+  } finally {
+    document.getElementById('genBtn').disabled = false
+  }
+}
+
+function setStatus(type, msg) {
+  const el = document.getElementById('statusBar')
+  el.className = type ? `status-bar ${type}` : 'status-bar'
+  el.innerHTML = type === 'loading' ? `<div class="spin"></div><span>${msg}</span>` : msg
+}
+
+// ═════════════════════════════════
+// POPUP + CONFETTI
+// ═════════════════════════════════
+let confettiAnim = null
+
+function showCelebration(demo = false) {
+  const proj = demo ? PROJECTS['catch-game'] : (PROJECTS[S.project] || PROJECTS['catch-game'])
+  const ans = demo ? { hero:'🚀 Ракета', world:'🌌 Космос' } : S.answers
+  const html = demo ? '<!DOCTYPE html><html><body>DEMO</body></html>\n'.repeat(50) : S.html
+  const name = (demo ? 'Никита' : S.name) || 'стажёр'
+  const lines = html ? html.split('\n').length : 247
+  const kb    = html ? Math.round(html.length / 1024 * 10) / 10 : 12.4
+  const sec   = demo ? 18 : (S.genSec || 20)
+
+  document.getElementById('popMedal').textContent = proj.trophy
+  document.getElementById('popTitle').textContent = proj.popTitle(ans)
+  document.getElementById('popGreeting').textContent = `Поздравляем, ${name}!`
+  document.getElementById('popSub').textContent = proj.popSub(ans)
+  document.getElementById('popBadge3').textContent = proj.badge3
+  document.getElementById('offerTitle').textContent = proj.offerTitle(name)
+
+  document.getElementById('popup').classList.add('show')
+
+  animCounter('statLines', 0, lines, 1200)
+  animCounter('statSec',   0, sec,   800)
+  animCounter('statKb',    0, Math.round(kb), 1000)
+
+  startConfetti()
+}
+
+function showDemo() {
+  if (!S.name) { S.name = 'Никита'; S.age = 12 }
+  showCelebration(true)
+}
+
+function closePopup() {
+  document.getElementById('popup').classList.remove('show')
+  stopConfetti()
+}
+
+function acceptOffer() {
+  closePopup()
+  document.getElementById('landGreeting').innerHTML =
+    `🎉 <span>${S.name || 'Привет'}, ты принят<br>на курс!</span>`
+  document.getElementById('landModal').classList.add('show')
+}
+
+function closeLand() {
+  document.getElementById('landModal').classList.remove('show')
+}
+
+function animCounter(id, from, to, dur) {
+  const el = document.getElementById(id)
+  const start = performance.now()
+  const tick = (now) => {
+    const p = Math.min((now - start) / dur, 1)
+    el.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - p, 3)))
+    if (p < 1) requestAnimationFrame(tick)
+  }
+  requestAnimationFrame(tick)
+}
+
+let particles = []
+function startConfetti() {
+  stopConfetti()
+  const canvas = document.getElementById('confettiCanvas')
+  const card = canvas.parentElement
+  canvas.width = card.offsetWidth
+  canvas.height = 320
+  const ctx = canvas.getContext('2d')
+  const colors = ['#A855F7','#22D3EE','#7C3AED','#06B6D4','#EC4899','#F59E0B','#10B981']
+
+  particles = Array.from({length: 100}, () => ({
+    x: Math.random() * canvas.width,
+    y: -10 - Math.random() * 100,
+    vx: (Math.random() - .5) * 2.5,
+    vy: 2 + Math.random() * 3.5,
+    r: 4 + Math.random() * 7,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    rot: Math.random() * Math.PI * 2,
+    vr: (Math.random() - .5) * .2,
+    shape: Math.random() > .5 ? 'rect' : 'circle'
+  }))
+
+  let frame = 0
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.rot += p.vr
+      if (p.y > canvas.height + 10) { p.y = -10; p.x = Math.random() * canvas.width }
+      ctx.save()
+      ctx.translate(p.x, p.y)
+      ctx.rotate(p.rot)
+      ctx.fillStyle = p.color
+      ctx.globalAlpha = 0.85
+      if (p.shape === 'rect') ctx.fillRect(-p.r, -p.r/2, p.r*2, p.r)
+      else { ctx.beginPath(); ctx.arc(0,0,p.r/2,0,Math.PI*2); ctx.fill() }
+      ctx.restore()
+    })
+    frame++
+    if (frame < 400) confettiAnim = requestAnimationFrame(draw)
+    else { ctx.clearRect(0,0,canvas.width,canvas.height); particles = [] }
+  }
+  confettiAnim = requestAnimationFrame(draw)
+}
+
+function stopConfetti() {
+  if (confettiAnim) cancelAnimationFrame(confettiAnim)
+  const c = document.getElementById('confettiCanvas')
+  if (c) c.getContext('2d').clearRect(0, 0, c.width, c.height)
+  particles = []
+}
+
+// ═════════════════════════════════
+// DOWNLOAD / FULLSCREEN / CODE
+// ═════════════════════════════════
+function downloadHTML() {
+  if (!S.html) return
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(new Blob([S.html], {type:'text/html'}))
+  a.download = `${(S.name||'app').toLowerCase()}-${Date.now()}.html`
+  a.click()
+}
+
+function openFull() {
+  if (!S.html) return
+  const w = window.open('', '_blank')
+  w.document.write(S.html); w.document.close()
+}
+
+function toggleCode() {
+  const pre = document.getElementById('codePre')
+  const btn = document.querySelector('.code-toggle-btn')
+  const open = pre.style.display === 'block'
+  pre.style.display = open ? 'none' : 'block'
+  btn.textContent = open ? '</> Посмотреть код ↓' : '</> Скрыть код ↑'
+}
+</script>
+</body>
+</html>
